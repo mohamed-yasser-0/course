@@ -43,16 +43,20 @@ const courseSchema = new mongoose.Schema({
         enum: ['Beginner', 'Intermediate', 'Advanced'],
         required: true
     },
-    status: {
-        type: String,
-        enum: ['Enrolled', 'Not Enrolled', 'Completed'],
-        default: 'Not Enrolled'
+    lessons: {
+        type: [
+            {
+                title: { type: String, required: true },
+                duration: { type: Number, default: 0 }
+            }
+        ],
+        default: []
     },
     image: {
-        type: String,        
+        type: String,
         default: null
     }
-}, { 
+}, {
     timestamps: true   // هيضيف createdAt و updatedAt تلقائي
 });
 
