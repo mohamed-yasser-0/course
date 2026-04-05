@@ -15,18 +15,18 @@ const allUser = asyncWrapper(async (req, res, next) => {
     })
 })
 const logIn = asyncWrapper(async (req, res, next) => {
-    const { email, password } = req.body
-    if (!email && !password) {
-        const error = appError.create('email and passsword are required', 400, FAIL)
+    const { phone, password } = req.body
+    if (!phone || !password) {
+        const error = appError.create('phone and password are required', 400, FAIL)
         return next(error);
     }
-    const myUser = await User.findOne({ email })
+    const myUser = await User.findOne({ phone })
     const truePass = await bcrypt.compare(password, myUser.password);
     if (!truePass) {
         const error = appError.create('password is not true', 404, FAIL)
         return next(error);
     }
-    const token = await JWT({ email: myUser.email, id: myUser._id ,role:myUser.role})
+    const token = await JWT({ phone: myUser.phone, id: myUser._id ,role:myUser.role})
 
     res.send({
         status: SUCCESS,
@@ -35,12 +35,12 @@ const logIn = asyncWrapper(async (req, res, next) => {
 })
 
 const regester = asyncWrapper(async (req, res, next) => {
-    const { name, email, password, role} = req.body
+    const { name, phone, password, role} = req.body
     console.log(req.file)
     const isMatch = await bcrypt.hash(password, 2)
     const user = {
         name,
-        email,
+        phone,
         password: isMatch,
         role,
         avatar: req.file,

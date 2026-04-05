@@ -7,11 +7,11 @@ const userSchema = new mongoose.Schema({
         required: true,   // لازم الاسم يكون موجود
         trim: true        // يشيل الفراغات قبل وبعد الاسم
     },
-    email: {
+    phone: {
         type: String,
         required: true,
-        unique: true,     // عشان مايتكررش
-        lowercase: true   // يحول كل الإيميل لصغير
+        unique: true,
+        trim: true
     },
     password: {
         type: String,
@@ -19,19 +19,19 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: [userRole.USER,userRole.ADMIN],  // تقدر تحدد أدوار
+        enum: [userRole.USER, userRole.ADMIN],  // تقدر تحدد أدوار
         default: userRole.USER
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
-    token:{
-        type:String
+    token: {
+        type: String
     },
-    avatar:{
+    avatar: {
         type: String,
-        default:'uploads/profile.png'
+        default: 'uploads/profile.png'
     }
 });
 
