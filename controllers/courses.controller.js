@@ -1,5 +1,6 @@
 const asyncWrapper = require('../middleware/asyncWrapper.js');
 const Corse = require('../model/course.model.js');
+const Lesson = require('../model/lesson.model.js');
 const { SUCCESS, FAIL } = require('../utils/httpStatusText.js');
 const appError = require('../utils/appError.js');
 
@@ -33,6 +34,26 @@ const postCourse = asyncWrapper(async (req, res, next) => {
         data: { "post": newCourse }
     })
 })
+const postLesson = asyncWrapper(async (req, res, next) => {
+    const course = await Corse.findById(req.params.id);
+    if (!course) {
+        const error = appError.create('course not found', 404, FAIL)
+        return next(error);
+    }
+
+    const lessonData = req.body;
+    const newLesson = new Lesson(lessonData);
+    await newLesson.save()
+
+    // إضافة الدرس للكورس
+    course.lessons.push(newLesson); // لو lessons array بيخزن IDs
+    await course.save();
+    
+    res.send({
+        status: SUCCESS,
+        data: { "post": course }
+    })
+})
 const updateCourse = async (req, res) => {
     // if (!errors.isEmpty()) {
     //     const error = appError.create('invalid data', 400, FAIL);
@@ -62,4 +83,4 @@ const deleteCourse = asyncWrapper(async (req, res, next) => {
     });
 });
 
-module.exports = { getCourse, getSengleCourse, deleteCourse, updateCourse, postCourse }
+module.exports = { getCourse, getSengleCourse, deleteCourse, updateCourse, postCourse, postLesson }

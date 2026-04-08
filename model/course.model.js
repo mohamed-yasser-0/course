@@ -18,8 +18,20 @@ const courseSchema = new mongoose.Schema({
     lessons: {
         type: [
             {
-                title: { type: String, required: true },
-                duration: { type: Number, default: 0 }
+                title: {
+                    type: String,
+                    required: true,
+                    trim: true
+                },
+                description: {
+                    type: String
+                },
+                videoUrl: {
+                    type: String
+                },
+                duration: {
+                    type: Number // خليه Number عشان تقدر تحط ساعات أو دقائق بسهولة
+                }
             }
         ],
         default: []
