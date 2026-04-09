@@ -34,6 +34,17 @@ const postCourse = asyncWrapper(async (req, res, next) => {
         data: { "post": newCourse }
     })
 })
+const getLessons = asyncWrapper(async (req, res, next) => {
+    const course = await Corse.findById(req.params.id);
+    if (!course) {
+        const error = appError.create('course not found', 404, FAIL)
+        return next(error);
+    }
+    res.send({
+        status: SUCCESS,
+        data: {lessons: course.lessons }
+    })
+});
 const postLesson = asyncWrapper(async (req, res, next) => {
     const course = await Corse.findById(req.params.id);
     if (!course) {
@@ -48,7 +59,7 @@ const postLesson = asyncWrapper(async (req, res, next) => {
     // إضافة الدرس للكورس
     course.lessons.push(newLesson); // لو lessons array بيخزن IDs
     await course.save();
-    
+
     res.send({
         status: SUCCESS,
         data: { "post": course }
@@ -83,4 +94,4 @@ const deleteCourse = asyncWrapper(async (req, res, next) => {
     });
 });
 
-module.exports = { getCourse, getSengleCourse, deleteCourse, updateCourse, postCourse, postLesson }
+module.exports = { getCourse, getSengleCourse, deleteCourse, updateCourse, postCourse, postLesson, getLessons }
