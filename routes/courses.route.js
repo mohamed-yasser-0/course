@@ -6,13 +6,13 @@ const verifyToken = require('../middleware/verifyToken.js');
 const router = express.Router();
 router.route('/')
     .get(verifyToken, getCourse)
-    .post(verifyToken, postCourse)
+    .post(verifyToken, allowedTo(userRole.ADMIN), postCourse)
 router.route('/:id')
     .get(verifyToken, getSengleCourse)
-    .patch(verifyToken, updateCourse)
-    .delete(verifyToken,allowedTo(userRole.ADMIN), deleteCourse)
+    .patch(verifyToken,allowedTo(userRole.ADMIN), updateCourse)
+    .delete(verifyToken, allowedTo(userRole.ADMIN), deleteCourse)
 router.route('/:id/lessons')
     .get(verifyToken, getLessons)
-    .post(verifyToken, postLesson)
+    .post(verifyToken,allowedTo(userRole.ADMIN), postLesson)
 
 module.exports = router

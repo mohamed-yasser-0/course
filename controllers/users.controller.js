@@ -7,13 +7,21 @@ const JWT = require('../utils/JWT.js');
 const userRole = require('../utils/userRoles.js');
 
 
-const allUser = asyncWrapper(async (req, res, next) => {
-    const users = await User.find({}, { "__v": false })
-    res.send({
-        status: SUCCESS,
-        data: { users }
+    const allUser = asyncWrapper(async (req, res, next) => {
+        console.log(req.decodedToken.id)
+        const id = req.decodedToken.id
+        
+        const user = await User.findById(id);
+        if (!user) {
+            const error = appError.create('course not found', 404, FAIL)
+            return next(error);
+        }
+        
+        res.send({
+            status: SUCCESS,
+            data: { user }
+        })
     })
-})
 const logIn = asyncWrapper(async (req, res, next) => {
     const { phone, password } = req.body
     if (!phone || !password) {
@@ -26,7 +34,7 @@ const logIn = asyncWrapper(async (req, res, next) => {
         const error = appError.create('password is not true', 404, FAIL)
         return next(error);
     }
-    const token = await JWT({ phone: myUser.phone, id: myUser._id ,role:myUser.role})
+    const token = await JWT({ phone: myUser.phone, id: myUser._id, role: myUser.role })
 
     res.send({
         status: SUCCESS,
@@ -35,7 +43,7 @@ const logIn = asyncWrapper(async (req, res, next) => {
 })
 
 const regester = asyncWrapper(async (req, res, next) => {
-    const { name, phone, password, role} = req.body
+    const { name, phone, password, role } = req.body
     console.log(req.file)
     const isMatch = await bcrypt.hash(password, 2)
     const user = {
@@ -46,7 +54,7 @@ const regester = asyncWrapper(async (req, res, next) => {
         avatar: req.file,
     }
     const newUser = new User(user);
-    
+
     // // genrate JWT token
     // const token = JWT({ email: newUser.email, id: newUser._id })
     // newUser.token = token
