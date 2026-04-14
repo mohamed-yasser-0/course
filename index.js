@@ -5,7 +5,11 @@ const cors = require("cors");
 const path = require('path');
 const mongoose = require('mongoose')
 
+<<<<<<< HEAD
 const daysRouter = require('./routes/days.route.js')
+=======
+const coursesRouter = require('./routes/courses.route.js')
+>>>>>>> 0d9d46c4e32b022bcd5af992152d5e0f6bdc23fb
 const usersRouter = require('./routes/users.route.js')
 
 const dns = require('dns');
@@ -23,7 +27,11 @@ mongoose.connect(url)
     .catch(err => {
 console.error('❌ فشل الاتصال بـ MongoDB Atlas:');
         console.error(err.message);    });
+<<<<<<< HEAD
 app.use('/api/days', daysRouter)
+=======
+app.use('/api/courses', coursesRouter)
+>>>>>>> 0d9d46c4e32b022bcd5af992152d5e0f6bdc23fb
 app.use('/api/users', usersRouter)
 
 app.use((req, res, next) => {
