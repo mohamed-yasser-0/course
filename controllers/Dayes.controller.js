@@ -29,12 +29,29 @@ const postDayse = asyncWrapper(async (req, res, next) => {
     //     const error = appError.create('invalid data', 400, FAIL);
     //     return next(error);
     // }
-    const newDayse = new Daye(req.body);
-    await newDayse.save()
-    res.send({
-        status: SUCCESS,
-        data: { "post": newDayse }
-    })
+    try {
+        const newDayse = new Daye(req.body);
+        await newDayse.save();
+
+        res.send({
+            status: SUCCESS,
+            data: { post: newDayse }
+        });
+
+    } catch (err) {
+
+        if (err.code === 11000) {
+            return res.status(400).send({
+                status: "FAILED",
+                message: "اليوم ده متسجل قبل كده ❌"
+            });
+        }
+
+        res.status(500).send({
+            status: "ERROR",
+            message: "حصل خطأ في السيرفر"
+        });
+    }
 })
 const updateDayse = async (req, res) => {
     // if (!errors.isEmpty()) {
