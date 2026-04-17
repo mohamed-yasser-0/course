@@ -43,7 +43,7 @@ const postDayse = asyncWrapper(async (req, res, next) => {
         if (err.code === 11000) {
             return res.status(400).send({
                 status: "FAILED",
-                message: "اليوم ده متسجل قبل كده ❌"
+                message: "اليوم ده متسجل قبل كده "
             });
         }
 

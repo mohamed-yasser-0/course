@@ -17,11 +17,11 @@ const daysSchema = new mongoose.Schema({
                 required: true
             },
             grades: {
-                arabic: {
+                listen: {
                     type: Number,
                     default: 0
                 },
-                english: {
+                speak: {
                     type: Number,
                     default: 0
                 },
